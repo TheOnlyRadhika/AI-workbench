@@ -1,0 +1,23 @@
+{
+    "tasks": [
+        {
+            "id": "signup-validation",
+            "goal": "Add password validation to /signup",
+            "owner": "builder",
+            "status": "done",
+            "acceptance": [
+                "Short passwords are rejected",
+                "Signup validation test passes"
+            ]
+        },
+        {
+            "id": "signup-tests",
+            "goal": "Add tests for signup validation",
+            "owner": "builder",
+            "status": "in_progress",
+            "acceptance": [
+                "Validation behavior is covered by tests"
+            ]
+        }
+    ]
+}
