@@ -14,10 +14,11 @@ def record_command_result(run_result : RunResult, command_result: CommandResult)
 
 
 
-def run_command(command: str) -> CommandResult:
+def run_command(command: str , repo_root:str) -> CommandResult:
     process = subprocess.run(
         command,
         shell=True,
+        cwd = repo_root,
         capture_output=True,
         text=True,
     )
