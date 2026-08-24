@@ -1,8 +1,9 @@
 import json
 from tools import TOOLS , TOOL_DEFINITIONS
-from models import Task
+from models import Task , RunResult
 from llm import ask_llm_with_tools , ask_llm
-from tool_guard import check_tool_allowed
+from tool_guard import check_tool_allowed , validate_tool_arguments
+from verifier import verify_run
 
 
 def  create_agent_prompt(task:Task) -> str:
@@ -35,15 +36,23 @@ def plan_task(task:Task)-> str:
     return ask_llm(prompt)
 
 def run_agent(task , repo_root):
+    run_result = RunResult(
+            label=task.description
+        )
     messages = [
         {
             "role": "system",
             "content": """
             You are an AI coding agent.
-            Work carefully inside the repository.
-            Use the available tools to inspect the repository,understand the task, 
-                make changes, and verify your work.
-            Do not modify files outside the allowed scope.
+            Complete the assigned coding task using the available tools.
+            Rules:
+            1. Inspect relevant files before modifying them.
+            2. Make the smallest necessary change.
+            3. Run the relevant tests after making changes.
+            4. If tests fail, inspect the failure and make another correction.
+            5. You may run tests multiple times.
+            6. Do not declare the task complete until verification succeeds.
+            7. Only use the tools explicitly provided to you. Never invent tool names or capabilities.
             """
         },
         {
@@ -75,16 +84,42 @@ def run_agent(task , repo_root):
                 for tool_call in message.tool_calls
             ]
         messages.append(assistant_message)
-        if not message.tool_calls:
-            return message.content
-        for tool_call in message.tool_calls:
+
+        for tool_call in (message.tool_calls or []):
             result = execute_tool_call(tool_call , task, repo_root)
+
+            if tool_call.function.name == "run_command":
+                run_result.command_results.append({
+                    "command": result.command,
+                    "stdout": result.stdout,
+                    "stderr": result.stderr,
+                    "exit_code": result.exit_code
+                })
+                run_result.tests_run = True
+
+
+            if tool_call.function.name == "write_file":
+                arguments = json.loads(
+                    tool_call.function.arguments
+                )
+                run_result.files_touched.append(
+                    arguments["path"]
+                )
+
             messages.append({
-                "role": "tool",
-                "tool_call_id": tool_call.id,
-                "name": tool_call.function.name,
-                "content": str(result),
-            })
+                            "role": "tool",
+                            "tool_call_id": tool_call.id,
+                            "name": tool_call.function.name,
+                            "content": str(result),
+                        })
+            
+
+        if not message.tool_calls:
+            run_result.declared_success = True
+            run_result.notes.append(message.content)
+
+            run_result = verify_run(run_result)
+            return run_result
         
     return "Agent stopped because the maximum number of steps was reached."
 
@@ -101,14 +136,28 @@ def execute_tool_call(tool_call, task , repo_root):
         arguments,
         task
     )
+
     if not allowed:
         return (
             f"Tool call rejected: "
             f"{tool_name} is not allowed for this task."
         )
+
+     # Check whether the arguments match the tool definition
+    args_valid, error = validate_tool_arguments(
+        tool_name,
+        arguments,
+        TOOL_DEFINITIONS
+    )
+
+    if not args_valid:
+        return f"Tool call rejected: {error}"
+
+    
     tool = TOOLS.get(tool_name)
     if tool is None:
         return f"Unknown tool: {tool_name}"
+    
     return tool(
             **arguments,
             repo_root= repo_root

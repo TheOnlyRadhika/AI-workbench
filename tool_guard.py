@@ -44,3 +44,26 @@ def check_command_allowed(command):
         return False
     first_word = parts[0]
     return first_word in ALLOWED_COMMANDS
+
+def validate_tool_arguments(tool_name, arguments, tool_definitions):
+    for tool in tool_definitions:
+        function = tool["function"]
+
+        if function["name"] == tool_name:
+            allowed_arguments = set(
+                function["parameters"]["properties"].keys()
+            )
+
+            unexpected_arguments = (
+                set(arguments.keys()) - allowed_arguments
+            )
+
+            if unexpected_arguments:
+                return False, (
+                    f"Unexpected arguments for {tool_name}: "
+                    f"{unexpected_arguments}"
+                )
+
+            return True, ""
+
+    return False, f"Unknown tool: {tool_name}"

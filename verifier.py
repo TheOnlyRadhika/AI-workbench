@@ -9,14 +9,15 @@ def verify_run(result: RunResult) -> RunResult:
         result.actually_passing = False
         result.notes.append("Verification failed: no commands were run")
         return result
-    for command in result.command_results:
-        if command["exit_code"] != 0:
-            result.actually_passing = False
-            result.notes.append(
-                f"Verification failed: {command['command']}"
-            )
-            return result
-
+    
+    last_command = result.command_results[-1]
+    if last_command["exit_code"] != 0:
+        result.actually_passing = False
+        result.notes.append(
+            f"Verification failed: {last_command['command']}"
+        )
+        return result
+    
     result.actually_passing = True
     result.tests_run = True
 

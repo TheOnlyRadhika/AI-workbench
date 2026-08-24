@@ -20,4 +20,4 @@ task = Task(
 repo_root ="workdir/demo_repo"
 result = run_agent(task , repo_root)
 print("\nFINAL AGENT RESPONSE:")
-print(result)
+print(result.summary())
