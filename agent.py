@@ -95,16 +95,18 @@ def run_agent(task , repo_root):
                     "stderr": result.stderr,
                     "exit_code": result.exit_code
                 })
-                run_result.tests_run = True
+                if "pytest" in result.command:
+                    run_result.tests_run = True
 
 
             if tool_call.function.name == "write_file":
                 arguments = json.loads(
                     tool_call.function.arguments
                 )
-                run_result.files_touched.append(
-                    arguments["path"]
-                )
+                path = arguments["path"]
+                if path not in run_result.files_touched:
+                    run_result.files_touched.append(path)
+
 
             messages.append({
                             "role": "tool",
@@ -118,7 +120,7 @@ def run_agent(task , repo_root):
             run_result.declared_success = True
             run_result.notes.append(message.content)
 
-            run_result = verify_run(run_result)
+            run_result = verify_run(run_result , task)
             return run_result
         
     return "Agent stopped because the maximum number of steps was reached."

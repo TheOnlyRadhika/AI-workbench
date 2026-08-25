@@ -14,8 +14,11 @@ task = Task(
     ],
     forbidden_files=[],
     acceptance=[
-        "All tests pass"
-    ]
+    "All tests pass",
+    "Tests are actually run",
+    "No scope violations",
+    "Agent reports completion"
+]
 )
 repo_root ="workdir/demo_repo"
 result = run_agent(task , repo_root)
