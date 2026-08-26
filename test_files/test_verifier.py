@@ -49,7 +49,6 @@ def test_tests_failed():
     )
 
     result = verify_run(result, task)
-
     assert result.actually_passing is False
 
 
@@ -72,7 +71,6 @@ def test_scope_violation():
     )
 
     result = verify_run(result, task)
-
     assert result.actually_passing is False
 
 
@@ -94,7 +92,6 @@ def test_agent_did_not_declare_completion():
     )
 
     result = verify_run(result, task)
-
     assert result.actually_passing is False
 
 
@@ -117,5 +114,4 @@ def test_successful_verification():
     )
 
     result = verify_run(result, task)
-
     assert result.actually_passing is True

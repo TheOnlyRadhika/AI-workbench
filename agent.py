@@ -123,7 +123,13 @@ def run_agent(task , repo_root):
             run_result = verify_run(run_result , task)
             return run_result
         
-    return "Agent stopped because the maximum number of steps was reached."
+    run_result.declared_success = False
+    run_result.actually_passing = False
+    run_result.notes.append(
+        "Agent stopped because the maximum number of steps was reached."
+    )
+
+    return run_result
 
 
 def execute_tool_call(tool_call, task , repo_root):

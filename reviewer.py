@@ -14,7 +14,7 @@ def review_run(task: Task, result: RunResult) -> ReviewResult:
         issues.append(
             "Verification did not pass"
         )
-    if not result.files_touched:
+    if task.allowed_files and not result.files_touched:
         issues.append(
             "No files were changed"
         )

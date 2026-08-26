@@ -3,6 +3,7 @@ from dataclasses import dataclass , field
 
 @dataclass
 class Task:
+    id : str
     description : str
     allowed_files: list[str]
     forbidden_files : list[str]
@@ -20,7 +21,6 @@ class RunResult:
     notes : list[str] = field(default_factory=list)
     command_results: list[dict] = field(default_factory=list)
         
-
     def summary(self)-> dict:
         return{
             "label" : self.label,
@@ -81,6 +81,7 @@ class CommandResult:
 
 @dataclass
 class HandOffPacket:
+
     task_id: str
     summary: dict
     files_touched : list[str] = field(default_factory = list)

@@ -1,5 +1,7 @@
 from models import HandOffPacket
-def create_handoff(state, task , summary:str)-> HandOffPacket:
+
+
+def create_handoff(state, task , summary: dict)-> HandOffPacket:
     return HandOffPacket(
         task_id = task.id,
         summary = summary,
