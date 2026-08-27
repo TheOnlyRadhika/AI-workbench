@@ -1,4 +1,4 @@
-from models import Task
+from models import Task , TaskStatus
 from orchestrator import execute_task
 
 
@@ -34,6 +34,7 @@ def test_execute_task():
     assert review.approved is True
     assert handoff.task_id == task.id
     assert handoff.files_touched == result.files_touched
+    assert task.status == TaskStatus.COMPLETED
     assert handoff.next_action == "Ready for handoff"
 
 

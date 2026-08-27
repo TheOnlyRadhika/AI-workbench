@@ -39,6 +39,8 @@ def run_agent(task , repo_root):
     run_result = RunResult(
             label=task.description
         )
+    
+
     messages = [
         {
             "role": "system",
@@ -52,7 +54,11 @@ def run_agent(task , repo_root):
             4. If tests fail, inspect the failure and make another correction.
             5. You may run tests multiple times.
             6. Do not declare the task complete until verification succeeds.
-            7. Only use the tools explicitly provided to you. Never invent tool names or capabilities.
+            7. Only use the tools explicitly provided to you. Never invent tool names
+               or capabilities.
+            8. If the repository already satisfies the task and the tests pass,
+               do not make unnecessary changes. You may finish the task without
+               modifying any files.
             """
         },
         {
@@ -62,6 +68,10 @@ def run_agent(task , repo_root):
     ]
 
     max_steps = 10
+
+    previous_tool_signature = None
+    repeat_count = 0
+    
     for step in range(max_steps):
         message = ask_llm_with_tools(
             messages,
@@ -86,6 +96,26 @@ def run_agent(task , repo_root):
         messages.append(assistant_message)
 
         for tool_call in (message.tool_calls or []):
+            tool_signature = (
+                tool_call.function.name,
+                tool_call.function.arguments
+            )
+
+            if tool_signature == previous_tool_signature:
+                repeat_count += 1
+            else:
+                repeat_count = 1
+
+            previous_tool_signature = tool_signature
+
+            if repeat_count >= 3:
+                run_result.declared_success = False
+                run_result.actually_passing = False
+                run_result.notes.append(
+                    "Agent stopped because it repeatedly called "
+                    f"{tool_call.function.name} with the same arguments."
+                )
+                return run_result
             result = execute_tool_call(tool_call , task, repo_root)
 
             if tool_call.function.name == "run_command":

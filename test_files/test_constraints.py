@@ -3,6 +3,7 @@ from constraints import check_file_allowed , check_run_scope, create_scope_contr
 
 
 task = Task(
+    id = "add-big-fix",
     description="Add input validation to /signup",
     allowed_files=["app.py", "test_app.py"],
     forbidden_files=["README.md", "scripts/release.sh"],

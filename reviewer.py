@@ -1,6 +1,5 @@
 from models import Task, RunResult , ReviewResult
 
-
 def review_run(task: Task, result: RunResult) -> ReviewResult:
 
     issues = []
@@ -13,10 +12,6 @@ def review_run(task: Task, result: RunResult) -> ReviewResult:
     if not result.actually_passing:
         issues.append(
             "Verification did not pass"
-        )
-    if task.allowed_files and not result.files_touched:
-        issues.append(
-            "No files were changed"
         )
     if not issues:
         notes.append(

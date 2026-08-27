@@ -4,6 +4,7 @@ from verifier import verify_run
 
 def make_task():
     return Task(
+        id = "add-big-fix",
         description="Test verification",
         allowed_files=["app.py"],
         forbidden_files=[],

@@ -1,5 +1,12 @@
 from dataclasses import dataclass , field
+from enum import Enum
 
+
+class TaskStatus(Enum):
+    PENDING = "pending"
+    RUNNING = "running"
+    COMPLETED = "completed"
+    FAILED = "failed"
 
 @dataclass
 class Task:
@@ -8,7 +15,9 @@ class Task:
     allowed_files: list[str]
     forbidden_files : list[str]
     acceptance : list[str]
-
+    status: TaskStatus = field(
+        default_factory=lambda: TaskStatus.PENDING
+    )
 
 @dataclass
 class RunResult:

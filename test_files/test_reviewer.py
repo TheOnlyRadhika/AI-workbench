@@ -4,6 +4,7 @@ from reviewer import review_run
 def test_review_success():
 
     task = Task(
+        id = "add-big-fix",
         description="Fix bug",
         allowed_files=["app.py"],
         forbidden_files=[],
@@ -25,6 +26,7 @@ def test_review_success():
 
 def test_review_verification_failure():
     task = Task(
+        id = "add-big-fix",
         description="Fix bug",
         allowed_files=["app.py"],
         forbidden_files=[],
@@ -45,6 +47,7 @@ def test_review_verification_failure():
 
 def test_review_scope_violation():
     task = Task(
+        id = "add-big-fix",
         description="Fix bug",
         allowed_files=["app.py"],
         forbidden_files=[],

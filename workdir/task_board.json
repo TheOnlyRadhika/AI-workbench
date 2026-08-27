@@ -4,7 +4,7 @@
             "id": "signup-validation",
             "goal": "Add password validation to /signup",
             "owner": "builder",
-            "status": "done",
+            "status": "in_progress",
             "acceptance": [
                 "Short passwords are rejected",
                 "Signup validation test passes"

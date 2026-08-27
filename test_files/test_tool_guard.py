@@ -3,6 +3,7 @@ from tool_guard import check_tool_allowed
 
 
 task = Task(
+    id = "add-big-fix",
     description="Update signup validation",
     allowed_files=[
         "app.py",
