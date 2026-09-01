@@ -1,1 +1,10 @@
 .env
+agentic-ai/
+__pycache__/
+*.pyc
+*.egg-info/
+.DS_Store
+
+workdir/real_repo/
+workdir/starter_repo/
+workdir/demo_repo/
