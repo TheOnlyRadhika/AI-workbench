@@ -53,17 +53,14 @@ def validate_tool_arguments(tool_name, arguments, tool_definitions):
             allowed_arguments = set(
                 function["parameters"]["properties"].keys()
             )
-
             unexpected_arguments = (
                 set(arguments.keys()) - allowed_arguments
             )
-
             if unexpected_arguments:
                 return False, (
                     f"Unexpected arguments for {tool_name}: "
                     f"{unexpected_arguments}"
                 )
-
             return True, ""
 
     return False, f"Unknown tool: {tool_name}"

@@ -21,6 +21,7 @@ def check_run_scope(contract:ScopeContract, result: RunResult) -> RunResult:
         result.notes.append(f"scope violations: {result.scope_violations}")
     return result
 
+
 def create_scope_contract(task:Task) -> ScopeContract:
     return ScopeContract(
         allowed_files = task.allowed_files,

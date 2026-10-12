@@ -14,7 +14,7 @@
             "id": "signup-tests",
             "goal": "Add tests for signup validation",
             "owner": "builder",
-            "status": "in_progress",
+            "status": "pending",
             "acceptance": [
                 "Validation behavior is covered by tests"
             ]

@@ -2,16 +2,30 @@ from agent import run_agent
 from verifier import verify_run
 from reviewer import review_run
 from handoff import create_handoff
-from models import AgentState , TaskStatus
+from models import  TaskStatus
+from state import initialize_state, load_state, save_state
+from task_board import initialize_board, load_board, save_board, update_task_status
+
 
 def execute_task(task, repo_root):
+    initialize_board()
+    board = load_board()
+    update_task_status(
+        board,
+        task.id,
+        TaskStatus.RUNNING.value,
+    )
+    save_board(board)
+
 
     # Task has started
     task.status = TaskStatus.RUNNING
 
-    state = AgentState(
-        active_task=task.id
-    )
+    initialize_state()
+    state = load_state()
+    state.active_task = task.id
+    state.next_action = "Running task"
+    save_state(state)
 
     result = run_agent(task, repo_root)
 
@@ -23,13 +37,23 @@ def execute_task(task, repo_root):
     if review.approved:
         task.status = TaskStatus.COMPLETED
         state.next_action = "Ready for handoff"
+
+        update_task_status(
+            board,
+            task.id,
+            TaskStatus.COMPLETED.value,
+        )
     else:
         task.status = TaskStatus.FAILED
         state.next_action = "Requires further work"
         state.blockers = review.issues
 
+        update_task_status(
+            board,
+            task.id,
+            TaskStatus.FAILED.value,
+        )
     state.touched_files = result.files_touched
-
     handoff_summary = {
         "status": "approved" if review.approved else "rejected",
         "tests_run": result.tests_run,

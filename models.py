@@ -59,9 +59,11 @@ class TaskItem:
     acceptance: list[str] = field(default_factory=list)
 
 
+
 @dataclass
 class TaskBoard:
     tasks: list[TaskItem] = field(default_factory=list)
+
 
 @dataclass
 class ScopeContract:
@@ -74,6 +76,7 @@ class ReviewResult:
     approved: bool
     issues: list[str] 
     notes : list[str]
+
 
 @dataclass
 class CommandResult:

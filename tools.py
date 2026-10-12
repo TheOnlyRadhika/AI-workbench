@@ -1,6 +1,5 @@
 from pathlib import Path
 from feedback import run_command
-
 from pathlib import Path
 
 
@@ -30,7 +29,7 @@ def list_files(repo_root) -> list[str]:
 def read_file(path : str , repo_root : str) -> str:
     file_path = Path(repo_root)/path
     if not file_path.exists():
-        return FileNotFoundError(f"file not found: {path}")
+        raise FileNotFoundError(f"file not found: {path}")
     return file_path.read_text()
 
 def write_file(path: str, content: str , repo_root:str) -> str:

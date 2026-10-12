@@ -1,0 +1,54 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+
+[project]
+name = "agentic-ai-workbench"
+version = "0.1.0"
+description = "An agentic AI workbench for autonomous repository-level software engineering tasks"
+requires-python = ">=3.11"
+
+dependencies = [
+    "groq",
+]
+
+
+[project.optional-dependencies]
+dev = [
+    "pytest",
+    "ruff",
+    "mypy",
+]
+
+
+[tool.pytest.ini_options]
+testpaths = ["test_files"]
+norecursedirs = [
+    "workdir",
+    "agentic-ai",
+    "__pycache__",
+]
+
+python_files = [
+    "test_*.py",
+    "*_test.py",
+]
+
+
+[tool.ruff]
+line-length = 100
+
+
+[tool.ruff.lint]
+select = [
+    "E",
+    "F",
+    "I",
+]
+
+
+[tool.mypy]
+python_version = "3.11"
+check_untyped_defs = true
+ignore_missing_imports = true

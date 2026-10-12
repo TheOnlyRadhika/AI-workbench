@@ -28,6 +28,11 @@ def save_state(state: AgentState):
     with STATE_FILE.open("w") as file:
         json.dump(data , file , indent = 4)
 
+def set_active_task(state: AgentState, task_id: str) -> AgentState:
+    state.active_task = task_id
+    state.next_action = "Task execution pending"
+    save_state(state)
+    return state
 
 
 
