@@ -1,4 +1,4 @@
-from models import Task, RunResult
+from models import RunResult, Task
 from verifier import verify_run
 
 

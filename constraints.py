@@ -1,4 +1,5 @@
-from models import Task, RunResult , ScopeContract
+from models import RunResult, ScopeContract, Task
+
 
 def check_file_allowed(contract: ScopeContract, file: str) -> bool:
     if file in contract.forbidden_files:

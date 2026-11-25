@@ -1,4 +1,4 @@
-from dataclasses import dataclass , field
+from dataclasses import dataclass, field
 from enum import Enum
 
 
@@ -29,7 +29,7 @@ class RunResult:
     scope_violations: list[str] = field(default_factory = list)
     notes : list[str] = field(default_factory=list)
     command_results: list[dict] = field(default_factory=list)
-        
+
     def summary(self)-> dict:
         return{
             "label" : self.label,
@@ -74,7 +74,7 @@ class ScopeContract:
 @dataclass
 class ReviewResult:
     approved: bool
-    issues: list[str] 
+    issues: list[str]
     notes : list[str]
 
 
@@ -99,7 +99,7 @@ class HandOffPacket:
     files_touched : list[str] = field(default_factory = list)
     blockers : list[str] = field(default_factory = list)
     next_action: str | None = None
-    
+
 
 
 

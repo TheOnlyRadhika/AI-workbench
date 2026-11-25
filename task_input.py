@@ -1,7 +1,5 @@
 from models import Task
-from models import Task
 from task_board import add_task, initialize_board, load_board, save_board
-
 
 
 def create_task(

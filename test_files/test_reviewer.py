@@ -1,5 +1,6 @@
-from models import Task , RunResult
+from models import RunResult, Task
 from reviewer import review_run
+
 
 def test_review_success():
 

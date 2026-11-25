@@ -1,5 +1,6 @@
 from unittest.mock import Mock
-from agent import execute_tool_call , run_agent
+
+from agent import execute_tool_call, run_agent
 
 
 def test_execute_tool_call_handles_invalid_json():

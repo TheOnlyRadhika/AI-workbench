@@ -1,5 +1,7 @@
 from unittest.mock import patch
+
 import pytest
+
 from github import clone_repo
 
 

@@ -1,5 +1,7 @@
 from pathlib import Path
 
+from models import Task
+
 
 def check_path_allowed(path: str, allowed_files: list[str], forbidden_files: list[str]) -> bool:
     normalized = Path(path)
@@ -9,7 +11,7 @@ def check_path_allowed(path: str, allowed_files: list[str], forbidden_files: lis
         return False
     return True
 
-def check_tool_allowed(tool_name: str, arguments: dict, task: object) -> bool:
+def check_tool_allowed(tool_name: str, arguments: dict, task: Task) -> bool:
     if tool_name == "read_file":
         return check_path_allowed(
             arguments["path"],

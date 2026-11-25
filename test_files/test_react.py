@@ -1,5 +1,5 @@
-from models import Task
 from agent import run_agent
+from models import Task
 
 task = Task(
     id = "add-big-fix",

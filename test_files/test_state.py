@@ -1,6 +1,4 @@
-from state import initialize_state, load_state, save_state
-from state import set_active_task
-
+from state import initialize_state, load_state, save_state, set_active_task
 
 initialize_state()
 

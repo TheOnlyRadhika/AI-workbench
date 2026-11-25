@@ -1,6 +1,8 @@
+from collections.abc import Callable
 from pathlib import Path
+from typing import Any
+
 from feedback import run_command
-from pathlib import Path
 
 
 def list_files(repo_root) -> list[str]:
@@ -41,7 +43,7 @@ def write_file(path: str, content: str , repo_root:str) -> str:
     return f"Successfully wrote {path}"
 
 
-TOOLS = {
+TOOLS: dict[str, Callable[..., Any]] = {
     "list_files": list_files,
     "read_file": read_file,
     "write_file": write_file,

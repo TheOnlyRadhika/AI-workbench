@@ -1,7 +1,8 @@
-from dataclasses import dataclass
 import subprocess
-from models import RunResult , CommandResult
-    
+
+from models import CommandResult, RunResult
+
+
 def record_command_result(run_result : RunResult, command_result: CommandResult)-> RunResult:
     run_result.command_results.append({
         "command": command_result.command,

@@ -1,5 +1,6 @@
 from models import RunResult, Task
 
+
 def verify_run(result: RunResult, task: Task) -> RunResult:
 
     # 1. Check scope violations already detected by the tool guard

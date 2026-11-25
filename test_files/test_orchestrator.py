@@ -1,4 +1,4 @@
-from models import Task , TaskStatus
+from models import Task, TaskStatus
 from orchestrator import execute_task
 
 
@@ -42,4 +42,3 @@ def test_execute_task():
     print("REVIEW:", review)
     print("HANDOFF:", handoff)
 
-    

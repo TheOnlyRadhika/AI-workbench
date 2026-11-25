@@ -1,8 +1,9 @@
 import json
-from tools import TOOLS , TOOL_DEFINITIONS
-from models import Task , RunResult , CommandResult
-from llm import ask_llm_with_tools , ask_llm
-from tool_guard import check_tool_allowed , validate_tool_arguments
+
+from llm import ask_llm, ask_llm_with_tools
+from models import CommandResult, RunResult, Task
+from tool_guard import check_tool_allowed, validate_tool_arguments
+from tools import TOOL_DEFINITIONS, TOOLS
 
 
 def  create_agent_prompt(task:Task) -> str:
@@ -38,7 +39,7 @@ def run_agent(task , repo_root):
     run_result = RunResult(
             label=task.description
         )
-    
+
 
     messages = [
         {
@@ -70,7 +71,7 @@ def run_agent(task , repo_root):
 
     previous_tool_signature = None
     repeat_count = 0
-    
+
     for step in range(max_steps):
         try:
             message = ask_llm_with_tools(
@@ -88,7 +89,7 @@ def run_agent(task , repo_root):
             run_result.actually_passing = False
             run_result.notes.append("LLM response was invalid or empty.")
             return run_result
-        
+
         assistant_message = {
             "role": "assistant",
             "content": message.content,
@@ -159,13 +160,13 @@ def run_agent(task , repo_root):
                             "name": tool_call.function.name,
                             "content": str(result),
                         })
-            
+
 
         if not message.tool_calls:
             run_result.declared_success = True
             run_result.notes.append(message.content)
             return run_result
-        
+
     run_result.declared_success = False
     run_result.actually_passing = False
     run_result.notes.append(
@@ -182,7 +183,7 @@ def execute_tool_call(tool_call, task , repo_root):
         arguments = json.loads(tool_call.function.arguments)
     except json.JSONDecodeError:
         return "Tool call rejected: invalid JSON arguments."
-    
+
     print("TOOL NAME:", tool_name)
     print("ARGUMENTS:", arguments)
     allowed = check_tool_allowed(
@@ -207,7 +208,7 @@ def execute_tool_call(tool_call, task , repo_root):
     if not args_valid:
         return f"Tool call rejected: {error}"
 
-    
+
     tool = TOOLS.get(tool_name)
     if tool is None:
         return f"Unknown tool: {tool_name}"
@@ -216,4 +217,3 @@ def execute_tool_call(tool_call, task , repo_root):
         return tool(**arguments, repo_root=repo_root)
     except Exception as e:
         return f"Tool execution failed: {e}"
-    

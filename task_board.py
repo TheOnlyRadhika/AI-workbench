@@ -1,7 +1,8 @@
 import json
-from pathlib import Path
 from dataclasses import asdict
-from models import TaskBoard, TaskItem , Task , TaskStatus
+from pathlib import Path
+
+from models import Task, TaskBoard, TaskItem, TaskStatus
 
 BOARD_FILE = Path("workdir") / "task_board.json"
 

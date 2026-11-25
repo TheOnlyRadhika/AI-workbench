@@ -1,6 +1,5 @@
-from models import Task , RunResult , ScopeContract
-from constraints import check_file_allowed , check_run_scope, create_scope_contract, validate_files
-
+from constraints import check_file_allowed, check_run_scope, create_scope_contract, validate_files
+from models import RunResult, Task
 
 task = Task(
     id = "add-big-fix",

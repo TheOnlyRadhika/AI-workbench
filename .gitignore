@@ -8,3 +8,5 @@ __pycache__/
 workdir/real_repo/
 workdir/starter_repo/
 workdir/demo_repo/
+workdir/task_board.json
+workdir/agent_state.json

@@ -1,6 +1,7 @@
+from pathlib import Path
+
 from state import initialize_state
 from task_board import initialize_board
-from pathlib import Path
 
 ROOT = Path(__file__).parent
 INSTRUCTIONS_FILE = ROOT / "AGENTS.md"
@@ -12,6 +13,5 @@ def check_instructions() -> None:
 
 def initialize_workbench():
     check_instructions()
-    initialize_state(),
+    initialize_state()
     initialize_board()
-    

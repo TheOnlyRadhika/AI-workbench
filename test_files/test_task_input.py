@@ -1,10 +1,8 @@
 import pytest
 
 from models import Task, TaskStatus
-from task_input import create_task
-from task_input import create_and_register_task
-from task_board import load_board , initialise_board
-
+from task_board import load_board
+from task_input import create_and_register_task, create_task
 
 
 def test_create_task():

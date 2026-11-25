@@ -1,8 +1,14 @@
-from task_board import initialize_board, load_board, save_board , get_next_task
 import pytest
-from models import Task, TaskBoard, TaskItem , TaskStatus
-from task_board import add_task , update_task_status
 
+from models import Task, TaskBoard, TaskItem
+from task_board import (
+    add_task,
+    get_next_task,
+    initialize_board,
+    load_board,
+    save_board,
+    update_task_status,
+)
 
 initialize_board()
 

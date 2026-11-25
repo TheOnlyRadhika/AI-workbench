@@ -1,7 +1,7 @@
 from unittest.mock import patch
 
-from models import Task
 from agent import run_agent
+from models import Task
 
 
 def test_repeated_tool_call_stops_agent():

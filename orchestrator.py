@@ -1,10 +1,10 @@
 from agent import run_agent
-from verifier import verify_run
-from reviewer import review_run
 from handoff import create_handoff
-from models import  TaskStatus
+from models import TaskStatus
+from reviewer import review_run
 from state import initialize_state, load_state, save_state
 from task_board import initialize_board, load_board, save_board, update_task_status
+from verifier import verify_run
 
 
 def execute_task(task, repo_root):
@@ -17,7 +17,6 @@ def execute_task(task, repo_root):
     )
     save_board(board)
 
-
     # Task has started
     task.status = TaskStatus.RUNNING
 
@@ -27,11 +26,23 @@ def execute_task(task, repo_root):
     state.next_action = "Running task"
     save_state(state)
 
-    result = run_agent(task, repo_root)
+    try:
+        result = run_agent(task, repo_root)
+        result = verify_run(result, task)
+        review = review_run(task, result)
+    except Exception as exc:
+        task.status = TaskStatus.FAILED
+        state.next_action = "Task execution failed"
+        state.blockers = [str(exc)]
 
-    result = verify_run(result, task)
-
-    review = review_run(task, result)
+        update_task_status(
+            board,
+            task.id,
+            TaskStatus.FAILED.value,
+        )
+        save_board(board)
+        save_state(state)
+        raise
 
     # Update task lifecycle based on review
     if review.approved:
@@ -54,6 +65,9 @@ def execute_task(task, repo_root):
             TaskStatus.FAILED.value,
         )
     state.touched_files = result.files_touched
+
+    save_board(board)
+    save_state(state)
     handoff_summary = {
         "status": "approved" if review.approved else "rejected",
         "tests_run": result.tests_run,
@@ -63,10 +77,15 @@ def execute_task(task, repo_root):
         "review_notes": review.notes,
     }
 
-    handoff = create_handoff(
-        state,
-        task,
-        handoff_summary
-    )
+    try:
+        handoff = create_handoff(state, task, handoff_summary)
+
+    except Exception as exc:
+        state.blockers.append(
+            f"Handoff generation failed: {exc}"
+        )
+        state.next_action = "Retry handoff generation"
+        save_state(state)
+        handoff = None
 
     return result, review, handoff

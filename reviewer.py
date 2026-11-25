@@ -1,4 +1,5 @@
-from models import Task, RunResult , ReviewResult
+from models import ReviewResult, RunResult, Task
+
 
 def review_run(task: Task, result: RunResult) -> ReviewResult:
 

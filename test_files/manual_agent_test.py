@@ -1,5 +1,5 @@
-from models import Task
 from agent import plan_task
+from models import Task
 
 
 def test_plan_task():
